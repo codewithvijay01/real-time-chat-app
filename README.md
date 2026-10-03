@@ -1,153 +1,295 @@
-# Real-Time Chat Application
+# 💬 Real-Time Chat App
 
-A responsive one-to-one messaging application built with React, Vite, Express, MongoDB, and Socket.IO. Users can create accounts, find other users, exchange messages in real time, and manage their profile and appearance.
+A modern **real-time chat application** built with the MERN stack and Socket.IO. Users can create accounts, search for other users, start conversations, exchange messages in real time, manage their profiles, and delete messages.
 
-## Features
+## 🚀 Live Demo
 
-- JWT-authenticated registration, login, session persistence, and logout
-- Password hashing with bcryptjs and rate-limited authentication endpoints
-- User search, one-to-one conversations, paginated message history, and message deletion
-- Real-time messages, typing indicators, online presence, read receipts, and unread counts
-- Profile editing with optional avatar upload
-- Responsive desktop/mobile chat layout, light/dark themes, loading and error states
-- Input validation, protected routes, conversation membership checks, and centralized API errors
+**Live Application:**
+https://real-time-chat-app-sepia-zeta.vercel.app
 
-## Tech Stack
+**GitHub Repository:**
+https://github.com/codewithvijay01/real-time-chat-app
 
-- **Client:** React, Vite, JavaScript, Tailwind CSS, Axios, React Router, Socket.IO Client
-- **Server:** Node.js, Express, Socket.IO, Mongoose, MongoDB, JWT, bcryptjs
+---
 
-## Project Structure
+## ✨ Features
+
+### 🔐 Authentication
+
+- User registration
+- User login
+- JWT-based authentication
+- Protected routes
+- Persistent login session
+
+### 💬 Real-Time Messaging
+
+- Real-time one-to-one messaging using Socket.IO
+- Instant message delivery
+- Online user status
+- Conversation history
+- Automatic chat updates
+
+### 👤 User Profile
+
+- Update username and profile information
+- Upload profile picture
+- Remove profile picture
+- Circular avatar display
+- User initials fallback when no profile picture is available
+
+### 🗑️ Message Management
+
+- Delete message for yourself
+- Delete message for everyone
+- Deleted messages are handled separately for each participant
+- Conversation previews respect deleted messages
+
+### 📱 Responsive Design
+
+- Desktop-friendly chat interface
+- Mobile-responsive layout
+- Mobile conversation sidebar
+- Full-screen mobile chat experience
+- Responsive authentication and profile pages
+
+### 🎨 UI
+
+- Clean modern interface
+- Light/Dark theme support
+- Responsive layout
+- Smooth transitions and animations
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- React
+- Vite
+- React Router
+- Axios
+- Socket.IO Client
+- Lucide React
+- CSS
+
+### Backend
+
+- Node.js
+- Express.js
+- Socket.IO
+- JWT
+- Multer
+- bcrypt
+
+### Database
+
+- MongoDB
+- Mongoose
+
+### Deployment
+
+- Vercel — Frontend
+- Render — Backend
+- MongoDB Atlas — Database
+
+---
+
+## 📂 Project Structure
 
 ```text
-.
+real-time-chat-app/
+│
 ├── client/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── context/
 │   │   ├── pages/
 │   │   ├── services/
-│   │   └── App.jsx
-│   └── .env.example
+│   │   ├── App.jsx
+│   │   └── styles.css
+│   └── package.json
+│
 ├── server/
-│   ├── config/
 │   ├── controllers/
-│   ├── middleware/
 │   ├── models/
 │   ├── routes/
-│   ├── sockets/
+│   ├── middleware/
+│   ├── utils/
 │   ├── uploads/
-│   └── .env.example
+│   ├── server.js
+│   └── package.json
+│
 ├── package.json
 └── README.md
 ```
 
-## Installation
+---
 
-Requirements: Node.js 20 or later, npm, and a MongoDB instance (local or hosted).
+## ⚙️ Run Locally
 
-Install each package's dependencies from the repository root:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/codewithvijay01/real-time-chat-app.git
+cd real-time-chat-app
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
-npm install --prefix server
-npm install --prefix client
+npm --prefix client install
+npm --prefix server install
 ```
 
-The root package coordinates the two apps; it does not use npm workspaces, so the server and client dependencies are installed separately.
+### 3. Configure environment variables
 
-## Environment Variables
+Create:
 
-Create local environment files from the examples:
-
-```bash
-cp server/.env.example server/.env
-cp client/.env.example client/.env
+```text
+server/.env
 ```
 
-Configure `server/.env`:
+Example:
 
-```dotenv
+```env
 PORT=4000
-MONGO_URI=mongodb://127.0.0.1:27017/real-time-chat
-JWT_SECRET=replace-with-a-long-random-secret
-CLIENT_URL=http://localhost:5173
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLIENT_URL=http://localhost:5176
 ```
 
-Set `JWT_SECRET` to a private random value of at least 32 characters. `CLIENT_URL` may contain comma-separated allowed origins.
+Create:
 
-Configure `client/.env` when using non-default URLs:
+```text
+client/.env
+```
 
-```dotenv
+Example:
+
+```env
 VITE_API_URL=http://localhost:4000/api
 VITE_SOCKET_URL=http://localhost:4000
 ```
 
-Never commit real `.env` files or secrets.
+> Never commit your `.env` files or secret keys to GitHub.
 
-## MongoDB Setup
+### 4. Start the application
 
-Start a local MongoDB server and use the example URI, or create a database on MongoDB Atlas and place its connection URI in `MONGO_URI`. Mongoose creates the collections and indexes when the server connects. The server exits with a clear startup error if MongoDB or the required JWT secret is unavailable.
-
-## Run the Application
-
-From the repository root, start both development servers:
+From the project root:
 
 ```bash
 npm run dev
 ```
 
-The Vite client is available at `http://localhost:5173`; the API and Socket.IO server use `http://localhost:4000` by default.
+The frontend will run on:
 
-Run either app independently:
-
-```bash
-npm run dev:server
-npm run dev:client
+```text
+http://localhost:5176
 ```
 
-Create a production client bundle with `npm run build`. Start the backend with `npm start` after configuring its environment.
+The backend will run on:
 
-## API Overview
+```text
+http://localhost:4000
+```
 
-All endpoints except registration and login require `Authorization: Bearer <token>` unless noted.
+---
 
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| POST | `/api/auth/register` | Register; accepts multipart form data and optional `profilePicture` |
-| POST | `/api/auth/login` | Authenticate with email or username and password |
-| POST | `/api/auth/logout` | End the authenticated client session |
-| GET | `/api/auth/me` | Return the current user |
-| GET | `/api/users` | List users |
-| GET | `/api/users/search?q=` | Search users |
-| GET | `/api/users/:id` | Get a user's public profile |
-| PUT | `/api/users/profile` | Update profile and optional avatar |
-| GET | `/api/conversations` | List the current user's conversations |
-| POST | `/api/conversations` | Find or create a one-to-one conversation |
-| GET | `/api/conversations/:id` | Get a conversation |
-| GET | `/api/messages/:conversationId` | Load a page of conversation messages |
-| POST | `/api/messages` | Persist and broadcast a message |
-| PUT | `/api/messages/:id/read` | Mark a received message as read |
-| DELETE | `/api/messages/:id` | Delete a message sent by the current user |
+## 🌐 Deployment
 
-## How Socket.IO Works
+The application is deployed using:
 
-Clients authenticate their socket handshake with the JWT. The server maps each authenticated user ID to their connected sockets, tracks presence and the active conversation, and checks conversation membership before joining rooms or relaying typing events. Messages are persisted through a shared service before being broadcast to the recipient; REST message submission uses the same service. Read state is persisted through the API and then announced to the conversation room.
+```text
+Frontend  → Vercel
+Backend   → Render
+Database  → MongoDB Atlas
+```
 
-Events include `presence:snapshot`, `user:online`, `user:offline`, `conversation:join`, `conversation:leave`, `message:send`, `message:receive`, `message:sent`, `typing:start`, `typing:stop`, `message:read`, `message:deleted`, and `unread:update`.
+Environment variables must be configured separately on Vercel and Render.
 
-## Screenshots
+---
 
-Screenshots can be added here after capturing the application in desktop and mobile layouts.
+## 🔄 Real-Time Architecture
 
-## Future Improvements
+```text
+React Client
+     │
+     │ HTTP / Axios
+     ▼
+Express API ─────────► MongoDB Atlas
+     │
+     │ Socket.IO
+     ▼
+Real-Time Messaging
+     │
+     ▼
+Other Connected Client
+```
 
-- Automated API and browser end-to-end tests
-- Multi-device session revocation and token refresh
-- Image and file attachments in conversations
-- Group conversations and message reactions
-- Deployment configuration and hosted image storage
+---
 
-## Author
+## 🔒 Security
 
-Maintained by the project owner.
+- Passwords are hashed before storage
+- JWT authentication is used for protected requests
+- Password fields are excluded from public user responses
+- Environment variables are used for sensitive configuration
+- Authentication-protected API routes
+
+---
+
+## 📱 Mobile Experience
+
+The application is fully responsive for mobile devices.
+
+On mobile:
+
+```text
+Conversation List
+       ↓
+Tap User
+       ↓
+Full-Screen Chat
+       ↓
+Back
+       ↓
+Conversation List
+```
+
+---
+
+## 🎯 Future Improvements
+
+Possible future improvements include:
+
+- Group conversations
+- Typing indicators
+- Message reactions
+- Image/file sharing
+- Read receipts
+- Push notifications
+- Voice/video calling
+- Message search
+- Emoji picker
+
+---
+
+## 👨‍💻 Author
+
+**Vijay Kumar**
+
+GitHub:
+https://github.com/codewithvijay01
+
+---
+
+## 📄 License
+
+This project is available for educational and personal use.
+
+---
+
+⭐ If you find this project useful, consider giving the repository a star.
